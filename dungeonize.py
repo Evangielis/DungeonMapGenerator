@@ -12,20 +12,22 @@ def parseSourceSink():
 
 class Map:
     def __init__(self, path):
-        t = ET.parse(path)
-        self.root = t.getroot()
+        self.tree = ET.parse(path)
+        self.root = self.tree.getroot()
         l = self.root.find("./layer")
         self.height = int(l.attrib['height'])
         self.width = int(l.attrib['width'])
         c = l.find("./data").text
         self.matrix = [x == '5' for x in c.split(',')]
 
+    def export(self, path):
+        data = self.root.find('./layer/data')
+        text = ','.join(['5' if x else '0' for x in self.matrix])
+        data.text = text
+        self.tree.write(path)
+
 sourceFile, sinkFile = parseSourceSink()
 m = Map(sourceFile)
-
-print m.height, m.width, m.matrix
-
-
-
+m.export(sinkFile)
 
 
