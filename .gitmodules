@@ -1,0 +1,3 @@
+[submodule "TiledMazeGenerator"]
+	path = TiledMazeGenerator
+	url = https://github.com/mozartalouis/TiledMazeGenerator.git
