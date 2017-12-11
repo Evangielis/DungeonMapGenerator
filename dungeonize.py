@@ -1,14 +1,15 @@
 import argparse
 import xml.etree.ElementTree as ET
+import random
 
 def parseSourceSink():
     parser = argparse.ArgumentParser(prog='dungeonize.py', description='Convert a tmx tilemaze into a dungeon')
-    parser.add_argument('-f', nargs='?', required=True)
-    parser.add_argument('-o', nargs='?', required=True)
+    parser.add_argument('-f', required=True)
+    parser.add_argument('-o')
+    parser.add_argument('--modulo')
+    parser.add_argument('--ppixel')
     args = vars(parser.parse_args())
-    return args['f'], args['o']
-
-
+    return args
 
 class Map:
     def __init__(self, path):
@@ -26,8 +27,52 @@ class Map:
         data.text = text
         self.tree.write(path)
 
-sourceFile, sinkFile = parseSourceSink()
-m = Map(sourceFile)
-m.export(sinkFile)
+    def __str__(self):
+        st = []
+        for i in range(0, self.height):
+            l = (i * self.width)
+            u = l + self.width
+            s = self.matrix[l:u]
+            st.append(''.join([' ' if x else 'O' for x in s]))
+        return '\n'.join(st)
 
+# m=matrix, n=mod, r=range over
+def moduloFill(m, n, r=0):
+    mout = list(m)
+    for x in range(0, len(mout)): 
+        if (x % n == 0):
+            i = x
+            while (mout[i] and i-x <= r):
+                i+=1
+            mout[i]=True
+    return mout
 
+# m=matrix, p=0.5
+def pPerPixel(m, p=0.5):
+    return [x if x else random.random() < p for x in m]
+
+def transform(mp, methods):
+    d = mp.matrix
+    if methods['modulo']:
+        d = moduloFill(d, float(methods['modulo']))
+    if methods['ppixel']:
+        print methods['ppixel']
+        d = pPerPixel(d, float(methods['ppixel']))
+    mp.matrix = d
+
+### Import Args
+args = parseSourceSink()
+source = args['f']
+sink = args['o']
+
+### Import Map
+mp = Map(source)
+
+### Transform
+transform(mp, args)
+
+### Export Map
+if not sink:
+    print mp
+else:
+    mp.export(sink)
