@@ -7,7 +7,7 @@ def parseSourceSink():
     parser.add_argument('-f', required=True)
     parser.add_argument('-o')
     parser.add_argument('--modulo')
-    parser.add_argument('--ppixel')
+    parser.add_argument('--pel')
     args = vars(parser.parse_args())
     return args
 
@@ -48,16 +48,15 @@ def moduloFill(m, n, r=0):
     return mout
 
 # m=matrix, p=0.5
-def pPerPixel(m, p=0.5):
+def pPerElement(m, p=0.5):
     return [x if x else random.random() < p for x in m]
 
 def transform(mp, methods):
     d = mp.matrix
     if methods['modulo']:
         d = moduloFill(d, float(methods['modulo']))
-    if methods['ppixel']:
-        print methods['ppixel']
-        d = pPerPixel(d, float(methods['ppixel']))
+    if methods['pel']:
+        d = pPerElement(d, float(methods['pel']))
     mp.matrix = d
 
 ### Import Args
