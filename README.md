@@ -18,13 +18,13 @@ Dungeonize doesn't modify the tile set path in any way, so for simplicity you sh
 
 ## Dungeonizing Methods
 
-### `Modulo` Fill
+### Modulo Fill
 ``` python
 python dungeonize.py -f [source filepath] -modulo [n]
 ```
 Starts at the top left corner and travels in a raster fashion, attempting to delete a wall at every position congruent to 0 modulo __n__.
 
-### `P` Per `El`ement
+### P Per Element
 ``` python
 python dungeonize.py -f [source filepath] -pel [p]
 ```
