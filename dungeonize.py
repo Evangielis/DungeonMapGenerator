@@ -37,14 +37,11 @@ class Map:
         return '\n'.join(st)
 
 # m=matrix, n=mod, r=range over
-def moduloFill(m, n, r=0):
+def moduloFill(m, n):
     mout = list(m)
     for x in range(0, len(mout)): 
         if (x % n == 0):
-            i = x
-            while (mout[i] and i-x <= r):
-                i+=1
-            mout[i]=True
+            mout[x]=True
     return mout
 
 # m=matrix, p=0.5
